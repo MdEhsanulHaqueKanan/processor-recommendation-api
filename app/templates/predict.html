@@ -1,0 +1,69 @@
+<!-- app/templates/predict.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Processor Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Processor Analyzer (ML)</h1>
+    <nav>
+        <a href="/">Recommendation Engine</a> |
+        <a href="/predict">Processor Analyzer (ML)</a>
+    </nav>
+    <hr>
+    <p>Fill in the processor specifications to predict its primary function and likely wireless features.</p>
+
+    <form action="/predict" method="post">
+        <div>
+            <label for="designer">Designer</label>
+            <select id="designer" name="designer" class="form-control"><option selected>Qualcomm</option><option>Apple</option><option>Samsung</option><option>MediaTek</option><option>HiSilicon</option><option>Other</option></select>
+        </div>
+        <div>
+            <label for="year_released">Year Released</label>
+            <input type="number" id="year_released" name="year_released" value="2023" required>
+        </div>
+        <div>
+            <label for="num_cores">Number of Cores</label>
+            <input type="number" id="num_cores" name="num_cores" value="8" required>
+        </div>
+        <div>
+            <label for="feature_size">Feature Size (nm)</label>
+            <input type="number" id="feature_size" name="feature_size" value="4" step="any" required>
+        </div>
+        <div class="form-check">
+            <input type="hidden" name="has_performance_cores" value="0">
+            <input type="checkbox" name="has_performance_cores" id="has_performance_cores" value="1"><label for="has_performance_cores">Has Performance Cores</label>
+        </div>
+        <div class="form-check">
+            <input type="hidden" name="has_5g" value="0">
+            <input type="checkbox" name="has_5g" id="has_5g" value="1"><label for="has_5g">Supports 5G</label>
+        </div>
+        <button type="submit">Predict Features</button>
+    </form>
+
+    <!-- UPDATED BLOCK to display both prediction results -->
+    {% if function_prediction %}
+    <div class="prediction-box">
+        <h4>Prediction Results:</h4>
+        <p>
+            <strong>Predicted Function:</strong>
+            {{ function_prediction }}
+        </p>
+        {% if wireless_prediction %}
+        <p>
+            <strong>Predicted Wireless Features:</strong>
+        </p>
+        <ul>
+            {% for feature in wireless_prediction %}
+                <li>{{ feature }}</li>
+            {% else %}
+                <li>None predicted.</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
